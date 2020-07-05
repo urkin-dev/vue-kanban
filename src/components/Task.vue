@@ -1,7 +1,7 @@
 <template>
     <div class="task">
         <p class="task__title">Задача № {{ data.id }}</p>
-        <span class="task__value">{{ data.title }}</span>
+        <p class="task__value">{{ data.title }}</p>
         <div v-if="isProcess || isDone" class="task__row">
             <strong>Дата и время начала</strong>
             <span>{{ date }}</span>
@@ -115,6 +115,7 @@ function formatDate(date) {
     cursor: pointer;
     padding: 10px;
     position: relative;
+    padding-bottom: 50px;
 }
 
 .task__title {
@@ -129,6 +130,9 @@ function formatDate(date) {
     display: block;
     margin-top: 10px;
     color: #41b883;
+    width: 100%;
+    word-break: break-all;
+    padding: 0;
 }
 
 .task__row {
