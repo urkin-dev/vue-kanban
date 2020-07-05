@@ -12,8 +12,8 @@ const getters = {
 
 const actions = {
 
-    async addTask({ commit }, title) {
-        commit('newTask', title);
+    async addTask({ commit }, { title, user }) {
+        commit('newTask', { title, user });
     },
 
     async setStatus({ commit }, { id, status }) {
@@ -27,7 +27,7 @@ const actions = {
 };
 
 const mutations = {
-    newTask: (state, title) => {
+    newTask: (state, { title, user }) => {
         let id;
         if (state.tasks.length === 0) {
             id = 1;
@@ -38,7 +38,8 @@ const mutations = {
         const task = {
             id: id,
             title: title,
-            status: 'Planned'
+            status: 'Planned',
+            user: user
         };
 
         state.tasks.push(task);
@@ -57,14 +58,12 @@ const mutations = {
 
             if (status === 'Process') {
                 task.date = new Date();
-                task.user = 'Ivan';
             }
 
             if (status === 'Done') {
                 // If task was drag from Planned to Done
                 if (pastStatus == 'Planned') {
                     task.date = new Date();
-                    task.user = 'Ivan';
                 }
                 
                 task.finishTime = new Date;
