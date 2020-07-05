@@ -34,7 +34,7 @@ export default {
 .column {
     max-width: 250px;
     width: 250px;
-    min-height: 100px;
+    min-height: 250px;
     max-height: 500px;
     border: 1px solid #00e676;
     border-radius: 5px;

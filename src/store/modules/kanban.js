@@ -1,16 +1,5 @@
 const state = {
-    tasks: [
-        {
-            id: 1,
-            title: 'Задача 1',
-            status: 'Planned'
-        },
-        {
-            id: 2,
-            title: 'Задача 2',
-            status: 'Planned'
-        }
-    ]
+    tasks: []
 };
 
 const getters = {
@@ -21,9 +10,76 @@ const getters = {
     }
 };
 
-const actions = {};
+const actions = {
 
-const mutations = {};
+    async addTask({ commit }, title) {
+        commit('newTask', title);
+    },
+
+    async setStatus({ commit }, { id, status }) {
+        commit('setTaskStatus', { id, status })
+    },
+
+    async delete({ commit }, {id}) {
+        commit('deleteTask', id)
+    }
+
+};
+
+const mutations = {
+    newTask: (state, title) => {
+        let id;
+        if (state.tasks.length === 0) {
+            id = 1;
+        } else {
+            id = Math.max(...state.tasks.map(task => task.id)) + 1;
+        }
+
+        const task = {
+            id: id,
+            title: title,
+            status: 'Planned'
+        };
+
+        state.tasks.push(task);
+    },
+    setTaskStatus: (state, { id, status }) => {
+        
+        const task = state.tasks.find(task => task.id === id)
+        
+        if (task !== undefined) {
+            const pastStatus = task.status;
+            if (pastStatus == status) {
+                return;
+            }
+
+            task.status = status;
+
+            if (status === 'Process') {
+                task.date = new Date();
+                task.user = 'Ivan';
+            }
+
+            if (status === 'Done') {
+                // If task was drag from Planned to Done
+                if (pastStatus == 'Planned') {
+                    task.date = new Date();
+                    task.user = 'Ivan';
+                }
+                
+                task.finishTime = new Date;
+            }
+        }
+
+    },
+    deleteTask: (state, id) => {
+        const index = state.tasks.findIndex(task => task.id == id);
+
+        if (index !== -1) {
+            state.tasks.splice(index, 1)
+        }
+    }
+};
 
 export default {
     state,

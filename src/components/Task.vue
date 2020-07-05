@@ -4,15 +4,15 @@
         <span class="task__value">{{ data.title }}</span>
         <div v-if="isProcess || isDone" class="task__row">
             <strong>Дата и время начала</strong>
-            <span>{{ data.date }}</span>
+            <span>{{ date }}</span>
+        </div>
+        <div v-if="isDone" class="task__row">
+            <strong>Ушло времени</strong>
+            <span>{{ timePassed }}</span>
         </div>
         <div v-if="isProcess || isDone" class="task__row">
             <strong>Ответственный</strong>
             <span>{{ data.user }}</span>
-        </div>
-        <div v-if="isDone" class="task__row">
-            <strong>Ушло времени</strong>
-            <span>{{ data.timePassed }}</span>
         </div>
         <div class="task__btns">
             <button>
@@ -20,17 +20,17 @@
                     <path d="M6 34.5V42h7.5l22.13-22.13-7.5-7.5L6 34.5zm35.41-20.41c.78-.78.78-2.05 0-2.83l-4.67-4.67c-.78-.78-2.05-.78-2.83 0l-3.66 3.66 7.5 7.5 3.66-3.66z"/>
                 </svg>
             </button>
-            <button v-if="!isProcess && !isDone">
+            <button @click="complete" v-if="!isProcess && !isDone">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#41b883" width="100%" height="100%" viewBox="0 0 48 48">
                     <path d="M18 32.34L9.66 24l-2.83 2.83L18 38l24-24-2.83-2.83z"/>
                 </svg>
             </button>
-            <button v-if="isProcess">
+            <button @click="complete" v-if="isProcess">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#41b883" width="100%" height="100%" viewBox="0 0 48 48">
                     <path d="M36 14l-2.83-2.83-12.68 12.69 2.83 2.83L36 14zm8.49-2.83L23.31 32.34 14.97 24l-2.83 2.83L23.31 38l24-24-2.82-2.83zM.83 26.83L12 38l2.83-2.83L3.66 24 .83 26.83z"/>
                 </svg>
             </button>
-            <button v-if="isDone">
+            <button @click="deleteTask" v-if="isDone">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#41b883" width="100%" height="100%" viewBox="0 0 48 48">
                     <path d="M38 12.83L35.17 10 24 21.17 12.83 10 10 12.83 21.17 24 10 35.17 12.83 38 24 26.83 35.17 38 38 35.17 26.83 24z"/>
                 </svg>
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     name: 'Task',
     props: {
@@ -51,8 +53,53 @@ export default {
         },
         isDone() {
             return this.data.status === 'Done'
+        },
+        date() {
+            return formatDate(this.data.date);
+        },
+        timePassed() {
+            let diff = this.data.finishTime - this.data.date;
+
+            const s = Math.floor(diff / 1000);
+            const m = Math.floor(s / 60);
+            const h = Math.floor(m / 60);
+            const d = Math.floor(h / 24);
+
+            return d + ' дней ' + h + ' часов ' + m + ' минут ' + s + ' секунд';
+        }
+    },
+    methods: {
+        ...mapActions(['setStatus', 'delete']),
+        complete() {
+            if (this.data.status === 'Planned') {
+                this.setStatus({id: this.data.id, status: 'Process' });
+            } else {
+                this.setStatus({id: this.data.id, status: 'Done' });
+            }
+        },
+        deleteTask() {
+            this.delete({id: this.data.id});
         }
     }
+}
+
+function formatDate(date) {
+
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let sec = date.getSeconds();
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    sec = sec < 10 ? '0' + sec : sec;
+    hours = hours < 10 ? '0' + hours : hours;
+
+    let month = date.getMonth() + 1;
+    let days = date.getDate();
+
+    month = month < 10 ? '0' + month : month;
+    days = days < 10 ? '0' + days : days;
+
+    let strTime = hours + ':' + minutes + ':' + sec;
+    return days + '/' + month + "/" + date.getFullYear() + "  " + strTime;
 }
 </script>
 
