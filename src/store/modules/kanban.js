@@ -1,5 +1,7 @@
 const state = {
-    tasks: []
+    tasks: [],
+    isModalVisible: false,
+    modalData: undefined
 };
 
 const getters = {
@@ -7,7 +9,9 @@ const getters = {
         return (status) => {
             return state.tasks.filter(task => task.status === status)
         }
-    }
+    },
+    getEditStatus: (state) => (state.isModalVisible),
+    getModalData: (state) => (state.modalData)
 };
 
 const actions = {
@@ -22,6 +26,10 @@ const actions = {
 
     async delete({ commit }, {id}) {
         commit('deleteTask', id)
+    },
+
+    async setModalEdit({ commit }, { isVisible, data }) {
+        commit('setModal', { isVisible, data })
     }
 
 };
@@ -77,6 +85,10 @@ const mutations = {
         if (index !== -1) {
             state.tasks.splice(index, 1)
         }
+    },
+    setModal: (state, { isVisible, data }) => {
+        state.isModalVisible = isVisible;
+        state.modalData = data;
     }
 };
 
