@@ -4,11 +4,11 @@
         <p class="task__value">{{ data.title }}</p>
         <div v-if="isProcess || isDone" class="task__row">
             <strong>Дата и время начала</strong>
-            <span>{{ date }}</span>
+            <span>{{ date() }}</span>
         </div>
         <div v-if="isDone" class="task__row">
             <strong>Ушло времени</strong>
-            <span>{{ timePassed }}</span>
+            <span>{{ timePassed() }}</span>
         </div>
         <div v-if="isProcess || isDone" class="task__row">
             <strong>Ответственный</strong>
@@ -53,19 +53,6 @@ export default {
         },
         isDone() {
             return this.data.status === 'Done'
-        },
-        date() {
-            return formatDate(this.data.date);
-        },
-        timePassed() {
-            let diff = this.data.finishTime - this.data.date;
-
-            const s = Math.floor(diff / 1000);
-            const m = Math.floor(s / 60);
-            const h = Math.floor(m / 60);
-            const d = Math.floor(h / 24);
-
-            return d + ' дней ' + h + ' часов ' + m + ' минут ' + s + ' секунд';
         }
     },
     methods: {
@@ -81,7 +68,20 @@ export default {
             this.delete({id: this.data.id});
         },
         edit() {
-            this.setModalEdit( { isVisible: true, data: this.data } )
+            this.setModalEdit( Object.assign({}, this.data) );
+        },
+        date() {
+            return formatDate(this.data.date);
+        },
+        timePassed() {
+            let diff = this.data.finishTime - this.data.date;
+
+            const s = Math.floor(diff / 1000);
+            const m = Math.floor(s / 60);
+            const h = Math.floor(m / 60);
+            const d = Math.floor(h / 24);
+
+            return d + ' дней ' + h + ' часов ' + m + ' минут ' + s + ' секунд';
         }
     }
 }

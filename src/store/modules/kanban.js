@@ -28,8 +28,17 @@ const actions = {
         commit('deleteTask', id)
     },
 
-    async setModalEdit({ commit }, { isVisible, data }) {
-        commit('setModal', { isVisible, data })
+    async setModalEdit({ commit }, data) {
+        commit('setModalData', data)
+        commit('setModalVisible', { isVisible: true })
+    },
+
+    async closeModalEdit({ commit }) {
+        commit('setModalVisible', { isVisible: false })
+    },
+
+    async setTaskData({ commit }, data) {
+        commit('changeTaskData', data)
     }
 
 };
@@ -86,9 +95,22 @@ const mutations = {
             state.tasks.splice(index, 1)
         }
     },
-    setModal: (state, { isVisible, data }) => {
-        state.isModalVisible = isVisible;
+    setModalData: (state, data) => {
         state.modalData = data;
+    },
+    setModalVisible: (state, { isVisible }) => {
+        state.isModalVisible = isVisible;
+    },
+    changeTaskData: (state, data) => {
+        
+        const task = state.tasks.find(task => task.id === data.id);
+
+        task.title      = data.title;
+        task.user       = data.user;
+        task.status     = data.status;
+        task.date       = data.date;
+        task.finishTime = data.finishTime;
+    
     }
 };
 
