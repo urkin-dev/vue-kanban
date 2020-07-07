@@ -1,5 +1,5 @@
 <template>
-    <div class="task" draggable="true" @dragstart="dragStart">
+    <div class="task" :class="{'dark-task': isDarkMode}" draggable="true" @dragstart="dragStart">
         <p class="task__title">Задача № {{ data.id }}</p>
         <p class="task__value">{{ data.title }}</p>
         <div v-if="isProcess || isDone" class="task__row">
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'Task',
@@ -48,11 +48,15 @@ export default {
         data: Object
     },
     computed: {
+        ...mapGetters(['getDarkModeStatus']),
         isProcess() {
             return this.data.status === 'Process'
         },
         isDone() {
             return this.data.status === 'Done'
+        },
+        isDarkMode() {
+            return this.getDarkModeStatus;
         }
     },
     methods: {
@@ -124,6 +128,16 @@ function formatDate(date) {
     padding-bottom: 50px;
 }
 
+.dark-task {
+    background-color: #03dac593;
+}
+
+.dark-task .task__title,
+.dark-task .task__value,
+.dark-task .task__row {
+    color: #1d1d1d;
+}
+
 .task__title {
     padding: 0;
     margin: 0;
@@ -167,5 +181,13 @@ function formatDate(date) {
     width: 30px;
     height: 30px;
     cursor: pointer;
+}
+
+.dark-task .task__btns button {
+    border-color:#1d1d1d;
+}
+
+.dark-task svg {
+    fill:#1d1d1d;
 }
 </style>

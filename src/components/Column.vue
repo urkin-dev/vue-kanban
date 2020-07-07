@@ -1,5 +1,5 @@
 <template>
-    <div class="column" role="list" @drop="drop" @dragover="dragover">
+    <div class="column" :class="{ 'dark-column': isDarkMode }" role="list" @drop="drop" @dragover="dragover">
         <h2 class="column__title">{{ title }} ({{tasks.length}})</h2>
         <div class="column__content">
             <Task role="listitem" v-for="task in tasks" :key="task.id" :data='task' />
@@ -19,9 +19,12 @@ export default {
         status: String
     },
     computed: {
-        ...mapGetters(['getTasks']),
+        ...mapGetters(['getTasks', 'getDarkModeStatus']),
         tasks() {
             return this.getTasks(this.status)
+        },
+        isDarkMode() {
+            return this.getDarkModeStatus;
         }
     },
     methods: {
@@ -54,6 +57,15 @@ export default {
     padding: 20px;
     color: rgb(46, 46, 46);
     overflow: auto;
+}
+
+.dark-column {
+    border: none;
+    background-color: #1d1d1d;
+}
+
+.dark-column .column__title {
+    color: #898989;
 }
 
 .column__title {

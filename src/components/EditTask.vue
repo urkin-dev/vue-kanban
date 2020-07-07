@@ -1,7 +1,7 @@
 // Нужно сохранять состояние глобально идиот!!!!!
 
 <template>
-    <div class="modal-wrapper">
+    <div class="modal-wrapper" :class="{'modal-dark': isDarkMode}">
         <p class="error">{{ error }}</p>
         <form class="modal-form" @submit.prevent="saveModal">
             <input type="text" class="modal-form__value" placeholder="Введите описание" v-model="data.title">
@@ -41,7 +41,7 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import 'vue2-datepicker/locale/ru';
 
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'EditTask',
@@ -52,11 +52,15 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(['getDarkModeStatus']),
         isProcess() {
             return this.data.status === 'Process';
         },
         isDone() {
             return this.data.status === 'Done';
+        },
+        isDarkMode() {
+            return this.getDarkModeStatus;
         }
     },
     methods: {
@@ -111,6 +115,11 @@ export default {
     flex-direction: column;
 }
 
+.modal-dark {
+    background-color: #1d1d1d;
+    border-color: #03dac593;
+}
+
 .modal-form {
     display: flex;
     flex-direction: column;
@@ -127,6 +136,13 @@ export default {
     border-radius: 5px;
     padding-left: 10px; 
     color: rgb(31, 31, 31);
+}
+
+.modal-dark .modal-form__value,
+.modal-dark .modal-form__status,
+.modal-dark .modal-form__user {
+    color: #03dac593;
+    border-color: #03dac593;
 }
 
 .modal-form__value,
@@ -148,6 +164,11 @@ export default {
     outline: none;
     color: #fff;
     cursor: pointer;
+}
+
+.modal-dark button {
+    background-color: #03dac593;
+    color: #d3d3d3;
 }
 
 .modal-close {
@@ -180,5 +201,9 @@ label {
     padding: 0;
     color: #228157;
     margin-top: 10px;
+}
+
+.modal-dark label {
+    color: #03dac593;
 }
 </style>

@@ -1,7 +1,8 @@
 const state = {
     tasks: [],
     isModalVisible: false,
-    modalData: undefined
+    modalData: undefined,
+    isDarkMode: false
 };
 
 const getters = {
@@ -11,7 +12,8 @@ const getters = {
         }
     },
     getEditStatus: (state) => (state.isModalVisible),
-    getModalData: (state) => (state.modalData)
+    getModalData: (state) => (state.modalData),
+    getDarkModeStatus: (state) => (state.isDarkMode)
 };
 
 const actions = {
@@ -39,6 +41,10 @@ const actions = {
 
     async setTaskData({ commit }, data) {
         commit('changeTaskData', data)
+    },
+
+    async darkModeToggle({ commit }) {
+        commit('toggleDark');
     }
 
 };
@@ -111,6 +117,9 @@ const mutations = {
         task.date       = data.date;
         task.finishTime = data.finishTime;
     
+    },
+    toggleDark: (state) => {
+        state.isDarkMode = !state.isDarkMode;
     }
 };
 

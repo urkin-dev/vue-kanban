@@ -1,5 +1,5 @@
 <template>
-    <div class="add-task">
+    <div class="add-task" :class="{'dark-add-task': isDarkMode}">
         <form @submit="onSubmit">
             <input type="text" v-model="title" placeholder="Добавить новую задачу">
             <input type="text" v-model="user" placeholder="Ваше имя" class="username">
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'AddTask',
@@ -33,8 +33,12 @@ export default {
                 this.title = '';
                 this.user = '';
             }
-
-            
+        }
+    },
+    computed: {
+        ...mapGetters(['getDarkModeStatus']),
+        isDarkMode() {
+            return this.getDarkModeStatus;
         }
     }
 }
@@ -73,5 +77,23 @@ form .username {
 
 input[type="text"]::placeholder {
     color: #41b883;
+}
+
+input[type="text"]:focus {
+    border: none;
+}
+
+.dark-add-task svg {
+    fill: #03dac593;
+}
+
+.dark-add-task input[type="text"] {
+    border-color: #03dac593;
+    background-color: #1d1d1d;
+    color: #03dac593;
+}
+
+.dark-add-task input[type="text"]::placeholder {
+    color: #03dac593;
 }
 </style>
