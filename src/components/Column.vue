@@ -1,14 +1,14 @@
 <template>
-    <div class="column">
+    <div class="column" role="list" @drop="drop" @dragover="dragover">
         <h2 class="column__title">{{ title }} ({{tasks.length}})</h2>
         <div class="column__content">
-            <Task v-for="task in tasks" :key="task.id" :data='task' />
+            <Task role="listitem" v-for="task in tasks" :key="task.id" :data='task' />
         </div>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import Task from './Task'
 
@@ -22,6 +22,19 @@ export default {
         ...mapGetters(['getTasks']),
         tasks() {
             return this.getTasks(this.status)
+        }
+    },
+    methods: {
+        ...mapActions(['setStatus']),
+        dragover (e) {
+            e.preventDefault()
+        },
+        drop (e) {
+            const id = e.dataTransfer.getData("task/id");
+            if (id) {
+                const ID = JSON.parse(id);
+                this.setStatus({ id: ID, status: this.status });
+            }
         }
     },
     components: {

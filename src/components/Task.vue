@@ -1,5 +1,5 @@
 <template>
-    <div class="task">
+    <div class="task" draggable="true" @dragstart="dragStart">
         <p class="task__title">Задача № {{ data.id }}</p>
         <p class="task__value">{{ data.title }}</p>
         <div v-if="isProcess || isDone" class="task__row">
@@ -82,6 +82,9 @@ export default {
             const d = Math.floor(h / 24);
 
             return d + ' дней ' + h + ' часов ' + m + ' минут ' + s + ' секунд';
+        },
+        dragStart(e) {
+            e.dataTransfer.setData("task/id", JSON.stringify(this.data.id));
         }
     }
 }
