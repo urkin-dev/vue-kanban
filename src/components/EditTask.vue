@@ -1,5 +1,3 @@
-// Нужно сохранять состояние глобально идиот!!!!!
-
 <template>
     <div class="modal-wrapper" :class="{'modal-dark': isDarkMode}">
         <p class="error">{{ error }}</p>

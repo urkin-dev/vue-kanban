@@ -4,11 +4,11 @@
         <p class="task__value">{{ data.title }}</p>
         <div v-if="isProcess || isDone" class="task__row">
             <strong>Дата и время начала</strong>
-            <span>{{ date() }}</span>
+            <span>{{ data.date }}</span>
         </div>
         <div v-if="isDone" class="task__row">
             <strong>Ушло времени</strong>
-            <span>{{ timePassed() }}</span>
+            <span>{{ data.finishTime }}</span>
         </div>
         <div v-if="isProcess || isDone" class="task__row">
             <strong>Ответственный</strong>
@@ -74,43 +74,43 @@ export default {
         edit() {
             this.setModalEdit( Object.assign({}, this.data) );
         },
-        date() {
-            return formatDate(this.data.date);
-        },
-        timePassed() {
-            let diff = this.data.finishTime - this.data.date;
+        // date() {
+        //     return formatDate(this.data.date);
+        // },
+        // timePassed() {
+        //     let diff = this.data.finishTime - this.data.date;
 
-            const s = Math.floor(diff / 1000);
-            const m = Math.floor(s / 60);
-            const h = Math.floor(m / 60);
-            const d = Math.floor(h / 24);
+        //     const s = Math.floor(diff / 1000);
+        //     const m = Math.floor(s / 60);
+        //     const h = Math.floor(m / 60);
+        //     const d = Math.floor(h / 24);
 
-            return d + ' дней ' + h + ' часов ' + m + ' минут ' + s + ' секунд';
-        },
+        //     return d + ' дней ' + h + ' часов ' + m + ' минут ' + s + ' секунд';
+        // },
         dragStart(e) {
             e.dataTransfer.setData("task/id", JSON.stringify(this.data.id));
         }
     }
 }
 
-function formatDate(date) {
+// function formatDate(date) {
 
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let sec = date.getSeconds();
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    sec = sec < 10 ? '0' + sec : sec;
-    hours = hours < 10 ? '0' + hours : hours;
+//     let hours = date.getHours();
+//     let minutes = date.getMinutes();
+//     let sec = date.getSeconds();
+//     minutes = minutes < 10 ? '0' + minutes : minutes;
+//     sec = sec < 10 ? '0' + sec : sec;
+//     hours = hours < 10 ? '0' + hours : hours;
 
-    let month = date.getMonth() + 1;
-    let days = date.getDate();
+//     let month = date.getMonth() + 1;
+//     let days = date.getDate();
 
-    month = month < 10 ? '0' + month : month;
-    days = days < 10 ? '0' + days : days;
+//     month = month < 10 ? '0' + month : month;
+//     days = days < 10 ? '0' + days : days;
 
-    let strTime = hours + ':' + minutes + ':' + sec;
-    return days + '/' + month + "/" + date.getFullYear() + "  " + strTime;
-}
+//     let strTime = hours + ':' + minutes + ':' + sec;
+//     return days + '/' + month + "/" + date.getFullYear() + "  " + strTime;
+// }
 </script>
 
 <style scoped>
