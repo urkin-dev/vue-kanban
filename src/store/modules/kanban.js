@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const state = {
     tasks: [],
     isModalVisible: false,
@@ -77,19 +79,19 @@ const mutations = {
                 return;
             }
 
-            task.status = status;
+            Vue.set(task, 'status', status)
 
             if (status === 'Process') {
-                task.date = new Date();
+                Vue.set(task, 'date', new Date());
             }
 
             if (status === 'Done') {
                 // If task was drag from Planned to Done
                 if (pastStatus == 'Planned') {
-                    task.date = new Date();
+                    Vue.set(task, 'date', new Date());
                 }
                 
-                task.finishTime = new Date;
+                Vue.set(task, 'finishTime', new Date());
             }
         }
 
@@ -111,11 +113,11 @@ const mutations = {
         
         const task = state.tasks.find(task => task.id === data.id);
 
-        task.title      = data.title;
-        task.user       = data.user;
-        task.status     = data.status;
-        task.date       = data.date;
-        task.finishTime = data.finishTime;
+        Vue.set(task, 'title', data.title);
+        Vue.set(task, 'user', data.user);
+        Vue.set(task, 'status', data.status);
+        Vue.set(task, 'date', data.date);
+        Vue.set(task, 'finishTime', data.finishTime);
     
     },
     toggleDark: (state) => {
