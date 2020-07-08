@@ -86,12 +86,8 @@ const mutations = {
             }
 
             if (status === 'Done') {
-                // If task was drag from Planned to Done
-                if (pastStatus == 'Planned') {
-                    Vue.set(task, 'date', new Date());
-                }
-                
-                Vue.set(task, 'finishTime', new Date());
+
+                Vue.set(task, 'finishTime', task.date);
             }
         }
 
